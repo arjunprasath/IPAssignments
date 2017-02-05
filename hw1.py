@@ -99,16 +99,16 @@ def main(argv):
 	input_img = cv2.cvtColor(input_img,cv2.COLOR_BGR2GRAY)
 	
 
-	#filter_height = input("Enter number of rows of the filter:")
-	#filter_width  = input("Enter number of columns of the filter:")
+	filter_height = input("Enter number of rows of the filter:")
+	filter_width  = input("Enter number of columns of the filter:")
 
-	#filter_mat = np.ones([filter_height,filter_width])
-	filter_mat = np.ones([5,5])/25
+	filter_mat = np.ones([filter_height,filter_width])
+	#filter_mat = np.ones([5,5])/25
 
-	#for i in xrange(filter_height):
-	#	for j in xrange(filter_width):
-	#		filter_mat[i,j] = input("Enter the Element (" +str(i)+","+str(j)+") of the filter coefficient Matrix:" )
-	#print filter_mat
+	for i in xrange(filter_height):
+		for j in xrange(filter_width):
+			filter_mat[i,j] = input("Enter the Element (" +str(i)+","+str(j)+") of the filter coefficient Matrix:" )
+	print filter_mat
 
 	output = convolve2D(input_img,filter_mat)
 	print output
