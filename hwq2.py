@@ -17,9 +17,12 @@ def gkern(kernlen=21, nsig=3):
     return kernel
 
 
+
+
+
+
 def convolve2D(img_mat,filter_mat):
-	#img_mat = img_mat.astype(np.uint8)
-	#img_mat = cv2.cvtColor(img_mat,cv2.COLOR_BGR2GRAY)
+	
 
 
 
@@ -64,15 +67,6 @@ def convolve2D(img_mat,filter_mat):
 	out_img = np.copy(img_mat)
 	out_img = scipy.signal.convolve2d(filter_mat,img_mat)
 
-	# Fourier Transforms
-
-	#input_fft = np.fft.fft2(img_mat)
-	#output_fft = np.fft.fft2(output_mat)
-	#in_fft = np.fft.fftshift(input_fft)
-	#out_fft = np.fft.fftshift(output_fft)
-
-	#freq_filter = np.fft.fft2(filter_mat)
-	#freq_filter = np.fft.fftshift(freq_filter)
 
 
 	img_mat = img_mat.astype(np.uint8)
@@ -90,12 +84,7 @@ def convolve2D(img_mat,filter_mat):
 	cv2.imshow('my conv2D',output_mat)
 	cv2.imwrite('outmine.jpg',output_mat)
 
-	#plt.imshow(np.log10(abs(in_fft)))
-	#plt.show()
-	#plt.imshow(np.log10(abs(out_fft)))
-	#plt.show()
-	#plt.imshow(np.log10(abs(freq_filter)))
-	#plt.show()
+	
 
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
@@ -109,14 +98,13 @@ def main(argv):
 
 	input_img = cv2.cvtColor(input_img,cv2.COLOR_BGR2GRAY)
 
-	print gkern(5,3)
-
-	#noise = np.random.normal(0,0.1,(input_img.shape))
+	
+	
 	noise_sigma = input("Enter the sigma for gaussian noise:")
-	noise = gkern(input_img.shape[0],noise_sigma)
-	#mean = (0,0)
-	#cov = [[0.1,0],[0,0.1]]
-	#noise = np.random.multivariate_normal(mean,cov,(3,3))
+	noise = np.random.normal(0,noise_sigma,(input_img.shape))
+	
+	
+	
 
 	filter_size = input("Enter the size of the matrix:")
 	filter_type = input("Filter Type: Enter 1 for Averaging. Enter 2 for Gaussian:")
@@ -126,7 +114,6 @@ def main(argv):
 
 	elif filter_type == 2:
 		sigma = input("Enter variance for the Gaussian filter:")
-		#filter_mat = np.random.normal(0,sigma,[filter_size,filter_size])
 		filter_mat = gkern(filter_size,sigma)
 	else:
 		print "Option not found"
@@ -134,24 +121,12 @@ def main(argv):
 
 	print filter_mat
 
-	#filter_height = input("Enter number of rows of the filter:")
-	#filter_width  = input("Enter number of columns of the filter:")
 
-	#filter_mat = np.ones([filter_height,filter_width])
-
-	# Averaging Filter
-	
-
-	#for i in xrange(filter_height):
-	#	for j in xrange(filter_width):
-	#		filter_mat[i,j] = input("Enter the Element (" +str(i)+","+str(j)+") of the filter coefficient Matrix:" )
-	#print filter_mat
-
-	input2 = input_img + noise*255
+	input2 =  input_img + noise*255
 	#input2 = out.astype(np.uint8)
 
 	output = convolve2D(input2,filter_mat)
-	#print output
+	
 
 
 
