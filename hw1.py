@@ -79,11 +79,25 @@ def convolve2D(img_mat,filter_mat):
 	cv2.imshow('my conv2D',output_mat)
 	cv2.imwrite('outmine.jpg',output_mat)
 
-	plt.imshow(np.log10(abs(in_fft)))
+	plt.imshow(np.log10(abs(in_fft)),cmap=plt.cm.gray)
+	plt.xlabel(u"X")
+	plt.ylabel(u"Y")
+	ax = plt.gca()
+	ax.set_title("The FFT of Input")
 	plt.show()
-	plt.imshow(np.log10(abs(out_fft)))
+
+	plt.imshow(np.log10(abs(out_fft)),cmap=plt.cm.gray)
+	plt.xlabel(u"X")
+	plt.ylabel(u"Y")
+	ax = plt.gca()
+	ax.set_title("The FFT of Output")
 	plt.show()
-	plt.imshow(np.log10(abs(freq_filter)))
+
+	plt.imshow(np.log10(abs(freq_filter)),cmap=plt.cm.gray)
+	plt.xlabel(u"X")
+	plt.ylabel(u"Y")
+	ax = plt.gca()
+	ax.set_title("The FFT of Filter")
 	plt.show()
 
 	cv2.waitKey(0)
@@ -107,7 +121,19 @@ def main(argv):
 
 	for i in xrange(filter_height):
 		for j in xrange(filter_width):
-			filter_mat[i,j] = input("Enter the Element (" +str(i)+","+str(j)+") of the filter coefficient Matrix:" )
+			while(1):
+				try:
+					filter_mat[i,j] = input("Enter the Element (" +str(i)+","+str(j)+") of the filter coefficient Matrix:" )
+					break
+
+			
+				except:
+					print 'Invalid element type! Please enter Integer or Float value:'
+					continue
+			
+				
+
+			
 	print filter_mat
 
 	output = convolve2D(input_img,filter_mat)
