@@ -3,6 +3,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.signal
 import sys
+import scipy.stats as st
+
+
+#Function to return Gaussian filter
+def gkern(kernlen=21, nsig=3):
+    
+    interval = (2*nsig+1.)/(kernlen)
+    x = np.linspace(-nsig-interval/2., nsig+interval/2., kernlen+1)
+    kern1d = np.diff(st.norm.cdf(x))
+    kernel_raw = np.sqrt(np.outer(kern1d, kern1d))
+    kernel = kernel_raw/kernel_raw.sum()
+    return kernel
+
 
 def convolve2D(img_mat,filter_mat):
 	#img_mat = img_mat.astype(np.uint8)
@@ -96,7 +109,11 @@ def main(argv):
 
 	input_img = cv2.cvtColor(input_img,cv2.COLOR_BGR2GRAY)
 
-	noise = np.random.normal(0,0.1,(input_img.shape))
+	print gkern(5,3)
+
+	#noise = np.random.normal(0,0.1,(input_img.shape))
+	noise_sigma = input("Enter the sigma for gaussian noise:")
+	noise = gkern(input_img.shape[0],noise_sigma)
 	#mean = (0,0)
 	#cov = [[0.1,0],[0,0.1]]
 	#noise = np.random.multivariate_normal(mean,cov,(3,3))
@@ -109,7 +126,8 @@ def main(argv):
 
 	elif filter_type == 2:
 		sigma = input("Enter variance for the Gaussian filter:")
-		filter_mat = np.random.normal(0,sigma,[filter_size,filter_size])
+		#filter_mat = np.random.normal(0,sigma,[filter_size,filter_size])
+		filter_mat = gkern(filter_size,sigma)
 	else:
 		print "Option not found"
 		return 0
@@ -129,7 +147,7 @@ def main(argv):
 	#		filter_mat[i,j] = input("Enter the Element (" +str(i)+","+str(j)+") of the filter coefficient Matrix:" )
 	#print filter_mat
 
-	input2 = input_img + noise*input_img
+	input2 = input_img + noise*255
 	#input2 = out.astype(np.uint8)
 
 	output = convolve2D(input2,filter_mat)
